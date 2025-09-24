@@ -1,17 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-</head>
-<body>
-      <h1>Hello Bloggers! Welcome to the Blog World </h1>
-      {% for v in vlogs %}
-        <h1>{{v.title}}</h1>
-        <h2>This is posted by {{v.author}}</h2>
-        <h3>This was posted on {{v.date_created}}</h3>
-      {% endfor %}
+{% extends 'blog/index.html' %}
 
-</body>
-</html>
+{% block title %}Home | My Blog{% endblock %}
+
+{% block content %}
+<div class="bg-white p-8 rounded-lg shadow-md text-center mb-8">
+    <h1 class="text-4xl font-bold text-gray-800 mb-2">Ready to think differently?</h1>
+    <p class="text-xl text-gray-600">Let's begin.</p>
+</div>
+<div class="flex flex-col sm:flex-row justify-center sm:justify-between items-center mb-6 px-4 py-3 bg-white rounded-lg shadow-sm">
+    <form action="{% url 'home' %}" method="get" class="w-full sm:w-1/2 flex mb-4 sm:mb-0">
+        <input type="text" name="q" placeholder="Search posts..." class="w-full px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <button type="submit" class="bg-gray-800 text-white px-4 py-2 rounded-r-lg hover:bg-gray-700 transition duration-300">
+            Search
+        </button>
+    </form>
+    
+    <a href="{% url 'home' %}" class="w-full sm:w-auto text-center px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300">
+        Add New Post
+    </a>
+</div>
+<h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Recent Posts</h1>
+<div class="posts-container grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    {% for post in dummy %}
+        <div class="post-card bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-300">
+            <h2 class="text-xl font-semibold text-gray-800 mb-2">{{ post.title }}</h2>
+            <p class="text-gray-600 text-sm mb-1"><strong>Author:</strong> {{ post.author }}</p>
+            <p class="text-gray-600 text-sm mb-4"><strong>Date:</strong> {{ post.date_posted }}</p>
+            {% if post.image %}
+                <img src="{{ MEDIA_URL }}post_pics/{{ post.image }}" alt="{{ post.title }}" class="w-full h-48 rounded-md mb-4 object-cover">
+            {% endif %}
+            <p class="text-gray-700">{{ post.content|truncatechars:100 }}</p>
+        </div>
+    {% empty %}
+        <p class="text-center text-gray-600 col-span-full">No posts available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

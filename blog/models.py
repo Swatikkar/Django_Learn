@@ -6,6 +6,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     profilepic = models.ImageField(upload_to='profile_pics', blank=True)
+    full_name = models.CharField(max_length=150,blank=True)
 
 class Posts(models.Model):
     title = models.CharField(max_length=200)

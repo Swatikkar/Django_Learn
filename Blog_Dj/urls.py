@@ -24,8 +24,9 @@ urlpatterns = [
     path('',home,name='home' ),
     path('about/',about,name='about' ),
     path('myfeeds/', myfeeds, name='myfeeds'),
-    path('login/',login,name = 'login'),
-    path('register/',register,name = 'register')
+    path('login/',login_page,name = 'login_page'),
+    path('register/',register,name = 'register'),
+    path('add_post/',add_post,name = 'add_post')
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

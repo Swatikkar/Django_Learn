@@ -15,9 +15,24 @@
 <body class="flex items-center justify-center min-h-screen">
 
     <div class="w-full max-w-sm bg-gray-800 p-8 rounded-lg shadow-2xl md:shadow-2xl border border-gray-700">
+         {% if messages %}
+            {% for message in messages %}
+                <div class="p-4 mb-4 rounded-lg
+                    {% if 'error' in message.tags or 'warning' in message.tags %}
+                        bg-red-800 text-white
+                    {% elif 'success' in message.tags %}
+                        bg-green-800 text-white
+                    {% else %}
+                        bg-gray-700 text-white
+                    {% endif %}
+                ">
+                {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
         <h1 class="text-3xl font-bold text-gray-100 text-center mb-6">Log In</h1>
 
-        <form method="post">
+        <form method="post" action="{% url 'login_page' %}">
             {% csrf_token %}
             
             <!-- Username -->

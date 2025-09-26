@@ -1,0 +1,59 @@
+{% extends 'blog/index.html' %}
+
+{% block content %}
+<div class="flex justify-center">
+    <div class="w-full max-w-2xl bg-gray-800 p-8 rounded-lg shadow-2xl border border-gray-700">
+        
+        <h2 class="text-3xl font-bold text-gray-100 text-center mb-6">Create New Post</h2>
+
+        {% if messages %}
+            <ul class="mb-6 space-y-3">
+                {% for message in messages %}
+                    <li class="p-3 rounded-lg text-white text-sm font-medium
+                        {% if 'error' in message.tags or 'warning' in message.tags %}
+                            bg-red-800
+                        {% elif 'success' in message.tags %}
+                            bg-green-800
+                        {% else %}
+                            bg-gray-700
+                        {% endif %}
+                    ">
+                    {{ message }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="space-y-4">
+            {% csrf_token %}
+            
+            <!-- Title -->
+            <div>
+                <label for="title" class="block text-gray-300 text-sm font-semibold mb-2">Title:</label>
+                <input type="text" id="title" name="title" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400">
+            </div>
+
+            <!-- Content -->
+            <div>
+                <label for="content" class="block text-gray-300 text-sm font-semibold mb-2">Content:</label>
+                <textarea id="content" name="content" rows="10" required class="w-full px-4 py-2 bg-gray-700 border border-gray-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"></textarea>
+            </div>
+
+            <!-- Image -->
+            <div class="pt-2">
+                <label for="image" class="block text-gray-300 text-sm font-semibold mb-2">Image (optional):</label>
+                <!-- Styled the file input for better visibility against the dark theme -->
+                <input type="file" id="image" name="image" class="w-full text-gray-300 text-sm file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+                <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Create Post
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+{% endblock %}

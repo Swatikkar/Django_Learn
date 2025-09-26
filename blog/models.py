@@ -8,7 +8,7 @@ class UserProfile(models.Model):
     profilepic = models.ImageField(upload_to='profile_pics', blank=True)
     full_name = models.CharField(max_length=150,blank=True)
 
-class Posts(models.Model):
+class Post(models.Model):
     title = models.CharField(max_length=200)
     author = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='post_pics', blank=True)

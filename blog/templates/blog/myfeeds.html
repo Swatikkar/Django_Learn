@@ -1,0 +1,41 @@
+{% extends 'blog/index.html' %}
+
+{% block title %}My Feeds | My Blog{% endblock %}
+
+{% block content %}
+<div class="flex justify-center mb-8">
+    <div class="w-full max-w-4xl bg-gray-800 p-8 rounded-lg shadow-2xl border border-gray-700 text-center">
+        <h1 class="text-4xl font-bold text-gray-100 mb-2">My Personal Posts</h1>
+        <p class="text-xl text-gray-400">All the content you've created.</p>
+    </div>
+</div>
+
+<div class="posts-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {% for post in vlogs %}
+        <!-- Dark themed post card -->
+        <div class="post-card bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700 hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+            <h2 class="text-xl font-semibold text-gray-100 mb-2">{{ post.title }}</h2>
+            
+            <p class="text-gray-400 text-sm mb-1"><strong>Author:</strong> {{ post.author }}</p>
+            <p class="text-gray-400 text-sm mb-4"><strong>Date:</strong> {{ post.date_posted }}</p>
+
+            {% if post.image %}
+                <img src="{{ post.image }}" alt="{{ post.title }}" class="w-full h-48 rounded-md mb-4 object-cover">
+            {% endif %}
+            
+            <p class="text-gray-300 mb-4">{{ post.content|truncatechars:150 }}</p>
+            
+            <!-- Example link to view the full post -->
+            <a href="{% url 'post_detail' post.pk %}" class="inline-block text-blue-400 hover:text-blue-300 font-medium transition duration-300">Read More &rarr;</a>
+        </div>
+    {% empty %}
+        <!-- Message for when the user has no posts -->
+        <div class="col-span-full bg-gray-800 p-8 rounded-lg border border-gray-700 text-center">
+            <p class="text-gray-400 text-lg">It looks like you haven't created any posts yet. Time to start sharing!</p>
+            <a href="{% url 'add_post' %}" class="mt-4 inline-block px-6 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition duration-300">
+                Add Your First Post
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -28,6 +28,8 @@ urlpatterns = [
     path('register/',register,name = 'register'),
     path('add_post/',add_post,name = 'add_post'),
     path('logout/', logout_view, name='logout'),
+    path('post/edit/<int:post_id>/', edit_post, name='edit_post'),
+    path('post/delete/<int:post_id>/', delete_post, name='delete_post'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

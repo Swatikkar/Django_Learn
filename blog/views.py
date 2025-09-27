@@ -1,5 +1,5 @@
-from django.shortcuts import render , redirect
-# from django.http import HttpResponse
+from django.shortcuts import render , redirect,get_object_or_404
+from django.http import HttpResponseForbidden
 from .models import Post,UserProfile
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -9,7 +9,7 @@ from .dummy_data import dummy_posts
 from django.conf import settings
 def home(request):
     query = request.GET.get('q', '').strip()
-    db_posts = Post.objects.all().values('title', 'author__user__username', 'image', 'content', 'date_posted')
+    db_posts = Post.objects.all().values('id','title', 'author__user__username', 'image', 'content', 'date_posted')
     posts = []
     fixed_dummy_posts = []
     for post in dummy_posts:
@@ -21,6 +21,7 @@ def home(request):
     for post in db_posts:
         image_url = settings.MEDIA_URL + post['image'] if post['image'] else ''
         posts.append({
+            "id": post['id'],
             "title": post['title'],
             "author": post['author__user__username'],
             "image": image_url,  # Might need to build URL separately
@@ -126,3 +127,44 @@ def login_page(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
+@login_required
+def edit_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if post.author != request.user.userprofile:
+        return HttpResponseForbidden("You are not allowed to edit this post.")
+
+    if request.method == 'POST':
+        title = request.POST.get('title', '').strip()
+        content = request.POST.get('content', '').strip()
+        image = request.FILES.get('image')
+
+        if not title or not content:
+            messages.error(request, "Title and Content are required.")
+            return render(request, 'blog/edit_post.html', {'post': post})
+
+        post.title = title
+        post.content = content
+        if image:
+            post.image = image
+        post.save()
+        messages.success(request, "Post updated successfully!")
+        return redirect('home')
+
+    return render(request, 'blog/edit_post.html', {'post': post})
+
+
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+
+    if post.author != request.user.userprofile:
+        return HttpResponseForbidden("You are not allowed to delete this post.")
+
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, "Post deleted successfully!")
+        return redirect('home')
+
+    return render(request, 'blog/confirm_delete.html', {'post': post})

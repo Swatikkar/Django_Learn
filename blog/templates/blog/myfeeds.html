@@ -11,7 +11,7 @@
 </div>
 
 <div class="posts-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {% for post in vlogs %}
+    {% for post in final_posts %}
         <!-- Dark themed post card -->
         <div class="post-card bg-gray-800 p-6 rounded-lg shadow-2xl border border-gray-700 hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
             <h2 class="text-xl font-semibold text-gray-100 mb-2">{{ post.title }}</h2>
@@ -26,7 +26,6 @@
             <p class="text-gray-300 mb-4">{{ post.content|truncatechars:150 }}</p>
             
             <!-- Example link to view the full post -->
-            <a href="{% url 'post_detail' post.pk %}" class="inline-block text-blue-400 hover:text-blue-300 font-medium transition duration-300">Read More &rarr;</a>
         </div>
     {% empty %}
         <!-- Message for when the user has no posts -->

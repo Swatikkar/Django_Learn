@@ -3,7 +3,7 @@ from django.shortcuts import render , redirect
 from .models import Post,UserProfile
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
 from .dummy_data import dummy_posts
 from django.conf import settings
@@ -42,6 +42,7 @@ def about(request):
 @login_required
 def myfeeds(request):
     db_posts = Post.objects.filter(author=request.user.userprofile).order_by('-date_posted')
+    print(f"Posts for user: {len(db_posts)}")
     posts = []
     for post in db_posts:
         image_url = settings.MEDIA_URL + post.image.name if post.image else ''
@@ -121,5 +122,7 @@ def login_page(request):
             return redirect('login_page')
 
     return render(request, 'blog/login.html')
-
-
+@login_required
+def logout_view(request):
+    logout(request)
+    return redirect('home')
